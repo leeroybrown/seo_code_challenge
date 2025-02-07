@@ -9,10 +9,12 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                ])
 SimpleCov.start do
   track_files 'lib/**/*.rb'
-  add_filter 'application.rb'
+  add_filter 'app.rb'
 end
 
 require 'simple_symbolize'
+
+require_relative '../lib/modules/validation'
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
