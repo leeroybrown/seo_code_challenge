@@ -9,6 +9,7 @@ class Record
   attr_reader :date_of_birth, :passport_number, :national_insurance_number
   attr_accessor :first_names, :last_name, :full_name, :address, :years_at_address, :errors
 
+  # TODO: fix opts
   def initialize(**opts)
     @first_names = opts[:first_names]
     @last_name = opts[:last_name]

@@ -13,7 +13,7 @@ class RecordProcessor
 
   def process
     parsed_data = parse_xml_file
-    process_records(parsed_data)
+    process_records(data: parsed_data)
     { valid: @valid_records, invalid: @invalid_records }
   end
 
@@ -25,17 +25,17 @@ class RecordProcessor
     parser.parse(xml_document)
   end
 
-  def process_records(data)
+  def process_records(data:)
     records = data.dig(:data, :people)
     raise NoRecordsError, 'No records found' unless records
 
     records.each do |record_data|
       record = Record.new(**record_data)
-      validate_record(record)
+      validate_record(record: record)
     end
   end
 
-  def validate_record(record)
+  def validate_record(record:)
     if valid_record?(record)
       @valid_records << record
     else
@@ -43,14 +43,29 @@ class RecordProcessor
     end
   end
 
+  # TODO: named argument
   def valid_record?(record)
-    return false if validate_name(record, :full_name)
-    return false if validate_age(record: record)
+    validate_name_characters(record, :full_name)
+    validate_name_length(record, :first_names)
+    validate_name_length(record, :last_name)
+    validate_age(record: record)
+    validate_address(record: record)
+    validate_years_at_address(record: record)
+    validate_identity_numbers(record: record)
+
+    return false if validate_name_characters(record, :full_name) ||
+                    validate_name_length(record, :first_names) ||
+                    validate_name_length(record, :last_name) ||
+                    validate_age(record: record) ||
+                    !validate_years_at_address(record: record) ||
+                    !validate_identity_numbers(record: record) ||
+                    !validate_address(record: record)
 
     true
   end
 
-  def validate_name(record, attribute)
+  # TODO: named argument
+  def validate_name_length(record, attribute)
     name = record.send(attribute)
 
     if record.character_limit_exceeded?(name: name)
@@ -58,12 +73,18 @@ class RecordProcessor
       true
     end
 
-    unless record.characters_valid?(name: name)
-      record.errors[:invalid_character] = 'Name contains invalid characters'
-      true
-    end
-
     false
+  end
+
+  # TODO: named argument
+  def validate_name_characters(record, attribute)
+    name = record.send(attribute)
+
+    return if record.characters_valid?(name: name)
+
+    record.errors[:invalid_character] = 'Name contains invalid characters'
+    true
+
   end
 
   def validate_age(record:)
@@ -72,5 +93,38 @@ class RecordProcessor
     record.errors[:minimum_age] = "Minimum age not met: #{record.check_age(date_of_birth: record.date_of_birth)}"
     true
 
+  end
+
+  def validate_years_at_address(record:)
+    if record.check_years_at_address(record: record) == false
+      record.errors[:years_at_address] = "Years at address not met: #{record.years_at_address}"
+      return false
+    end
+
+    true
+  end
+
+  def validate_identity_numbers(record:)
+    if record.check_identity_numbers(record: record) == false
+      record.errors[:identity_numbers] = 'Missing both identity numbers'
+      return false
+    end
+
+    true
+  end
+
+  def validate_address(record:)
+    if record.check_address(address: record.address) == false
+      record.errors[:invalid_address] = 'Invalid address'
+      return false
+    end
+
+    if record.address.key?(:line1) == false
+      record.address = {
+        line1: "#{record.address[:building_number]} #{record.address[:street_name]} #{record.address[:town]}",
+        postcode: record.address[:postcode]
+      }
+    end
+    return true
   end
 end
