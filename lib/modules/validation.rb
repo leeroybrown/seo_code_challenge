@@ -20,4 +20,20 @@ module Validation
     age
   end
 
+  def check_address(address:)
+    # Assumption: address is invalid if postcode is NOT present or address is nil
+    return false if address.nil?
+    return false unless address.key?(:postcode)
+  end
+
+  def check_years_at_address(record:)
+    return false if years_at_address.nil?
+
+    record.years_at_address >= 5
+  end
+
+  def check_identity_numbers(record:)
+    false if record.passport_number.nil? && record.national_insurance_number.nil?
+  end
+
 end
