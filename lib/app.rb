@@ -2,12 +2,13 @@ require 'nokogiri'
 require 'nori'
 require 'simple_symbolize'
 
-require_relative 'models/person'
+require_relative 'models/record'
+require_relative 'models/record_processor'
 
-doc = Nokogiri::XML(File.open('./data/records.xml')).to_s
-parser = Nori.new(convert_tags_to: ->(h) { SimpleSymbolize.symbolize(h) })
-x = parser.parse(doc)
-x.dig(:data, :people).each do |person|
-  record = Person.new(**person)
-  binding.irb
-end
+processor = RecordProcessor.new(file_path: './data/records.xml')
+results = processor.process
+
+puts "Valid Records: #{results[:valid].count}"
+puts "Invalid Records: #{results[:invalid].count}"
+binding.irb
+
