@@ -3,7 +3,10 @@
 require_relative 'record'
 
 class RecordProcessor
+
   class NoRecordsError < StandardError; end
+
+  attr_reader :file_path, :valid_records, :invalid_records
 
   def initialize(file_path:)
     @file_path = file_path
@@ -37,15 +40,15 @@ class RecordProcessor
 
   def validate_record(record:)
     if valid_record?(record)
-      @valid_records << record
+      @valid_records << record.output_values
     else
-      @invalid_records << record
+      @invalid_records << record.output_values
     end
   end
 
   # TODO: named argument
   def valid_record?(record)
-    validate_name_characters(record, :full_name)
+    validate_name_characters(record)
     validate_name_length(record, :first_names)
     validate_name_length(record, :last_name)
     validate_age(record: record)
@@ -53,7 +56,7 @@ class RecordProcessor
     validate_years_at_address(record: record)
     validate_identity_numbers(record: record)
 
-    return false if validate_name_characters(record, :full_name) ||
+    return false if validate_name_characters(record) ||
                     validate_name_length(record, :first_names) ||
                     validate_name_length(record, :last_name) ||
                     validate_age(record: record) ||
@@ -77,8 +80,8 @@ class RecordProcessor
   end
 
   # TODO: named argument
-  def validate_name_characters(record, attribute)
-    name = record.send(attribute)
+  def validate_name_characters(record)
+    name = record.full_name
 
     return if record.characters_valid?(name: name)
 
@@ -96,7 +99,7 @@ class RecordProcessor
   end
 
   def validate_years_at_address(record:)
-    if record.check_years_at_address(record: record) == false
+    if record.years_at_address_valid?(years_at_address: record.years_at_address) == false
       record.errors[:years_at_address] = "Years at address not met: #{record.years_at_address}"
       return false
     end
@@ -105,7 +108,7 @@ class RecordProcessor
   end
 
   def validate_identity_numbers(record:)
-    if record.check_identity_numbers(record: record) == false
+    if record.identity_numbers_valid?(passport_number: record.passport_number, national_insurance_number: record.national_insurance_number) == false
       record.errors[:identity_numbers] = 'Missing both identity numbers'
       return false
     end
@@ -114,7 +117,7 @@ class RecordProcessor
   end
 
   def validate_address(record:)
-    if record.check_address(address: record.address) == false
+    if record.address_valid?(address: record.address) == false
       record.errors[:invalid_address] = 'Invalid address'
       return false
     end
@@ -125,6 +128,6 @@ class RecordProcessor
         postcode: record.address[:postcode]
       }
     end
-    return true
+    true
   end
 end
