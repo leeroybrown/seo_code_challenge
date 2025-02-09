@@ -18,8 +18,6 @@ class FileProcessor
       end
     rescue Errno::ENOENT => error
       raise "Error whilst attempting to save file: #{error}"
-    else
-      true
     end
   end
 end
