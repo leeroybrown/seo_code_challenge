@@ -5,6 +5,8 @@ require_relative 'record'
 class RecordProcessor
   class NoRecordsError < StandardError; end
 
+  attr_reader :file_path, :valid_records, :invalid_records
+
   def initialize(file_path:)
     @file_path = file_path
     @valid_records = Set.new
@@ -96,7 +98,7 @@ class RecordProcessor
   end
 
   def validate_years_at_address(record:)
-    if record.check_years_at_address(years_at_address: record.years_at_address) == false
+    if record.years_at_address_valid?(years_at_address: record.years_at_address) == false
       record.errors[:years_at_address] = "Years at address not met: #{record.years_at_address}"
       return false
     end
@@ -105,7 +107,7 @@ class RecordProcessor
   end
 
   def validate_identity_numbers(record:)
-    if record.check_identity_numbers(record: record) == false
+    if record.identity_numbers_valid?(passport_number: record.passport_number, national_insurance_number: record.national_insurance_number) == false
       record.errors[:identity_numbers] = 'Missing both identity numbers'
       return false
     end
@@ -114,7 +116,7 @@ class RecordProcessor
   end
 
   def validate_address(record:)
-    if record.check_address(address: record.address) == false
+    if record.address_valid?(address: record.address) == false
       record.errors[:invalid_address] = 'Invalid address'
       return false
     end
@@ -125,6 +127,6 @@ class RecordProcessor
         postcode: record.address[:postcode]
       }
     end
-    return true
+    true
   end
 end

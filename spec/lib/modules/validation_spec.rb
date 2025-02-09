@@ -106,15 +106,19 @@ RSpec.describe Validation do
   describe '#check_address' do
     context 'when checking addresses' do
       it 'returns false when address is nil' do
-        expect(dummy_class.check_address(address: nil)).to be false
+        expect(dummy_class.address_valid?(address: nil)).to be false
       end
 
       it 'returns false when address is empty' do
-        expect(dummy_class.check_address(address: '')).to be false
+        expect(dummy_class.address_valid?(address: { } )).to be false
       end
 
       it 'returns false when postcode is not supplied' do
-        expect(dummy_class.check_address(address: {building_number: '1234', town: 'blah'})).to be false
+        expect(dummy_class.address_valid?(address: { building_number: '1234', town: 'blah' })).to be false
+      end
+
+      it 'returns true when postcode is present' do
+        expect(dummy_class.address_valid?(address: { postcode: 'SA12 3AS' })).to be true
       end
     end
   end
@@ -122,59 +126,43 @@ RSpec.describe Validation do
   describe '#check_years_at_address' do
     context 'when checking how long someone has lived at their address' do
       it 'returns false when years_at_address is nil' do
-        expect(dummy_class.check_years_at_address(years_at_address: nil)).to be false
+        expect(dummy_class.years_at_address_valid?(years_at_address: nil)).to be false
       end
 
       it 'returns false when years_at_address is empty' do
-        expect(dummy_class.check_years_at_address(years_at_address: '')).to be false
+        expect(dummy_class.years_at_address_valid?(years_at_address: '')).to be false
       end
 
       it 'returns false when years_at_address is not a number' do
-        expect(dummy_class.check_years_at_address(years_at_address: 'blah')).to be false
+        expect(dummy_class.years_at_address_valid?(years_at_address: 'blah')).to be false
       end
 
       it 'returns false when years_at_address is not a whole number' do
-        expect(dummy_class.check_years_at_address(years_at_address: 1.5)).to be false
+        expect(dummy_class.years_at_address_valid?(years_at_address: 1.5)).to be false
       end
 
       it 'returns false when years_at_address is negative' do
-        expect(dummy_class.check_years_at_address(years_at_address: -1)).to be false
+        expect(dummy_class.years_at_address_valid?(years_at_address: -1)).to be false
       end
 
       it 'returns true when years_at_address is greater than or equal to 5' do
-        expect(dummy_class.check_years_at_address(years_at_address: rand(5..100))).to be true
+        expect(dummy_class.years_at_address_valid?(years_at_address: rand(5..100))).to be true
       end
     end
   end
 
-  describe '#check_passport_number' do
-    context 'when checking passport number' do
-      it 'returns false if passport number is nil' do
-        expect(dummy_class.check_passport_number(passport_number: nil)).to be false
+  describe '#check_identity_numbers' do
+    context 'when checking identity numbers' do
+      it 'returns true when passport number is nil and national insurance number is present' do
+        expect(dummy_class.identity_numbers_valid?(passport_number: nil, national_insurance_number: 'HY 65 Y7 88 GG')).to be true
       end
 
-      it 'returns false if passport number is empty' do
-        expect(dummy_class.check_passport_number(passport_number: '')).to be false
+      it 'returns true when passport number is present and national insurance number is nil' do
+        expect(dummy_class.identity_numbers_valid?(passport_number: 'DS567899Y', national_insurance_number: nil)).to be true
       end
 
-      it 'returns true if passport number is a string' do
-        expect(dummy_class.check_passport_number(passport_number: 'r4ndom 5tring')).to be true
-      end
-    end
-  end
-
-  describe '#check_national_insurance_number' do
-    context 'when checking national insurance number' do
-      it 'returns false if national insurance number is nil' do
-        expect(dummy_class.check_national_insurance_number(national_insurance_number: nil)).to be false
-      end
-
-      it 'returns false if national insurance number is empty' do
-        expect(dummy_class.check_national_insurance_number(national_insurance_number: '')).to be false
-      end
-
-      it 'returns true if national insurance number is a string' do
-        expect(dummy_class.check_national_insurance_number(national_insurance_number: 'r4ndom 5tring')).to be true
+      it 'returns false when passport number and national insurance numbers are nil' do
+        expect(dummy_class.identity_numbers_valid?(passport_number: nil, national_insurance_number: nil)).to be false
       end
     end
   end

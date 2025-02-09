@@ -15,6 +15,8 @@ end
 require 'simple_symbolize'
 
 require_relative '../lib/modules/validation'
+require_relative '../lib/models/record'
+require_relative '../lib/models/record_processor'
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
