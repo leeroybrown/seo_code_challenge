@@ -40,4 +40,10 @@ module Validation
     true if passport_number.is_a?(String)
   end
 
+  def check_national_insurance_number(national_insurance_number:)
+    return false if national_insurance_number.nil? || national_insurance_number.empty?
+
+    true if national_insurance_number.is_a?(String)
+  end
+
 end

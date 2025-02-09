@@ -162,5 +162,21 @@ RSpec.describe Validation do
       end
     end
   end
+
+  describe '#check_national_insurance_number' do
+    context 'when checking national insurance number' do
+      it 'returns false if national insurance number is nil' do
+        expect(dummy_class.check_national_insurance_number(national_insurance_number: nil)).to be false
+      end
+
+      it 'returns false if national insurance number is empty' do
+        expect(dummy_class.check_national_insurance_number(national_insurance_number: '')).to be false
+      end
+
+      it 'returns true if national insurance number is a string' do
+        expect(dummy_class.check_national_insurance_number(national_insurance_number: 'r4ndom 5tring')).to be true
+      end
+    end
+  end
 end
 
