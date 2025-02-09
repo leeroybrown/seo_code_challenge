@@ -3,6 +3,7 @@
 require_relative 'record'
 
 class RecordProcessor
+
   class NoRecordsError < StandardError; end
 
   attr_reader :file_path, :valid_records, :invalid_records
@@ -39,15 +40,15 @@ class RecordProcessor
 
   def validate_record(record:)
     if valid_record?(record)
-      @valid_records << record
+      @valid_records << record.output_values
     else
-      @invalid_records << record
+      @invalid_records << record.output_values
     end
   end
 
   # TODO: named argument
   def valid_record?(record)
-    validate_name_characters(record, :full_name)
+    validate_name_characters(record)
     validate_name_length(record, :first_names)
     validate_name_length(record, :last_name)
     validate_age(record: record)
@@ -55,7 +56,7 @@ class RecordProcessor
     validate_years_at_address(record: record)
     validate_identity_numbers(record: record)
 
-    return false if validate_name_characters(record, :full_name) ||
+    return false if validate_name_characters(record) ||
                     validate_name_length(record, :first_names) ||
                     validate_name_length(record, :last_name) ||
                     validate_age(record: record) ||
@@ -79,8 +80,8 @@ class RecordProcessor
   end
 
   # TODO: named argument
-  def validate_name_characters(record, attribute)
-    name = record.send(attribute)
+  def validate_name_characters(record)
+    name = record.full_name
 
     return if record.characters_valid?(name: name)
 
