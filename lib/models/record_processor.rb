@@ -96,7 +96,7 @@ class RecordProcessor
   end
 
   def validate_years_at_address(record:)
-    if record.check_years_at_address(record: record) == false
+    if record.check_years_at_address(years_at_address: record.years_at_address) == false
       record.errors[:years_at_address] = "Years at address not met: #{record.years_at_address}"
       return false
     end
