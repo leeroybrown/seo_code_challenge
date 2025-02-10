@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require 'capitalize_names'
 require_relative '../modules/validation'
 
 class Record
@@ -28,15 +28,25 @@ class Record
   def output_values
     @passport_number.upcase! unless @passport_number.nil?
     @address = "#{@address[:line1]}, #{@address[:postcode]}" unless @address.nil?
-    @errors = "" if @errors.empty?
+    @errors = nil if @errors.empty?
 
-    [@first_names.capitalize,
-     @last_name.capitalize,
+    [CapitalizeNames.capitalize(@first_names),
+     surname_format(surname: @last_name),
      @date_of_birth.strftime('%d, %b, %Y'),
      @address,
      @years_at_address,
      @passport_number,
      @national_insurance_number,
      @errors]
+  end
+
+  private
+
+  def surname_format(surname:)
+    if surname.chars.include?("'")
+      surname.split("'").map(&:capitalize).join("'")
+    else
+      surname.capitalize
+    end
   end
 end

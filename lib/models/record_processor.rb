@@ -6,18 +6,25 @@ class RecordProcessor
 
   class NoRecordsError < StandardError; end
 
-  attr_reader :file_path, :valid_records, :invalid_records
+  attr_reader :file_path, :valid_records, :invalid_records, :summarise_invalid_records, :summarise_valid_records
 
   def initialize(file_path:)
     @file_path = file_path
     @valid_records = Set.new
     @invalid_records = Set.new
+    @summarise_valid_records = Set.new
+    @summarise_invalid_records = Set.new
   end
 
   def process
     parsed_data = parse_xml_file
     process_records(data: parsed_data)
-    { valid: @valid_records, invalid: @invalid_records }
+    {
+      valid: @valid_records,
+      invalid: @invalid_records,
+      summarise_valid: @summarise_valid_records,
+      summarise_invalid: @summarise_invalid_records
+    }
   end
 
   private
@@ -41,8 +48,10 @@ class RecordProcessor
   def validate_record(record:)
     if valid_record?(record)
       @valid_records << record.output_values
+      @summarise_valid_records << record
     else
       @invalid_records << record.output_values
+      @summarise_invalid_records << record
     end
   end
 
@@ -57,12 +66,12 @@ class RecordProcessor
     validate_identity_numbers(record: record)
 
     return false if validate_name_characters(record) ||
-                    validate_name_length(record, :first_names) ||
-                    validate_name_length(record, :last_name) ||
-                    validate_age(record: record) ||
-                    !validate_years_at_address(record: record) ||
-                    !validate_identity_numbers(record: record) ||
-                    !validate_address(record: record)
+      validate_name_length(record, :first_names) ||
+      validate_name_length(record, :last_name) ||
+      validate_age(record: record) ||
+      !validate_years_at_address(record: record) ||
+      !validate_identity_numbers(record: record) ||
+      !validate_address(record: record)
 
     true
   end
