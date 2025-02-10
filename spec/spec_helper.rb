@@ -13,6 +13,8 @@ SimpleCov.start do
 end
 
 require 'simple_symbolize'
+require 'nokogiri'
+require 'nori'
 
 require_relative '../lib/modules/validation'
 require_relative '../lib/models/record'
