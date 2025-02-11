@@ -4,7 +4,7 @@ RSpec.describe RecordProcessor do
   let(:processor) { described_class.new(file_path: './data/records.xml') }
 
   describe '#initialize' do
-    context 'when RecordProcessor is initialized' do
+    context 'when RecordProcessor is created' do
       it 'sets file_path' do
         expect(processor.file_path).to be_a String
         expect(processor.file_path).to eq('./data/records.xml') # store this in a constant
@@ -38,16 +38,6 @@ RSpec.describe RecordProcessor do
       expect(processor).to respond_to(:invalid_records)
       expect(processor).to_not respond_to(:invalid_records=)
     end
-
-    it 'allows reading but not writing of summarise_valid_records' do
-      expect(processor).to respond_to(:summarise_valid_records)
-      expect(processor).to_not respond_to(:summarise_valid_records=)
-    end
-
-    it 'allows reading but not writing of summarise_invalid_records' do
-      expect(processor).to respond_to(:summarise_invalid_records)
-      expect(processor).to_not respond_to(:summarise_invalid_records=)
-    end
   end
 
   describe '#process' do
@@ -62,14 +52,6 @@ RSpec.describe RecordProcessor do
 
       it 'returns a hash with invalid_records' do
         expect(processor.process[:invalid]).to be_a Set
-      end
-
-      it 'returns a hash with summarise_valid' do
-        expect(processor.process[:summarise_valid]).to be_a Set
-      end
-
-      it 'returns a hash with summarise_invalid' do
-        expect(processor.process[:summarise_invalid]).to be_a Set
       end
     end
   end

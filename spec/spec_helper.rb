@@ -19,6 +19,7 @@ require 'nori'
 require_relative '../lib/modules/validation'
 require_relative '../lib/models/record'
 require_relative '../lib/models/record_processor'
+require_relative '../lib/models/file_processor'
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
