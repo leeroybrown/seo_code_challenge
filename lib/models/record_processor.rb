@@ -6,14 +6,12 @@ class RecordProcessor
 
   class NoRecordsError < StandardError; end
 
-  attr_reader :file_path, :valid_records, :invalid_records, :summarise_invalid_records, :summarise_valid_records
+  attr_reader :file_path, :valid_records, :invalid_records
 
   def initialize(file_path:)
     @file_path = file_path
     @valid_records = Set.new
     @invalid_records = Set.new
-    @summarise_valid_records = Set.new
-    @summarise_invalid_records = Set.new
   end
 
   def process
