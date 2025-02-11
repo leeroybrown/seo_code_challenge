@@ -21,9 +21,7 @@ class RecordProcessor
     process_records(data: parsed_data)
     {
       valid: @valid_records,
-      invalid: @invalid_records,
-      summarise_valid: @summarise_valid_records,
-      summarise_invalid: @summarise_invalid_records
+      invalid: @invalid_records
     }
   end
 
@@ -48,10 +46,8 @@ class RecordProcessor
   def validate_record(record:)
     if valid_record?(record)
       @valid_records << record.output_values
-      @summarise_valid_records << record
     else
       @invalid_records << record.output_values
-      @summarise_invalid_records << record
     end
   end
 
@@ -126,6 +122,7 @@ class RecordProcessor
   end
 
   def validate_address(record:)
+    # Can I use pattern matching here?
     if record.address_valid?(address: record.address) == false
       record.errors[:invalid_address] = 'Invalid address'
       return false
