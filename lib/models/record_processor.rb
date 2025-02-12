@@ -51,57 +51,59 @@ class RecordProcessor
 
   # TODO: named argument
   def valid_record?(record)
-    validate_name_characters(record)
-    validate_name_length(record, :first_names)
-    validate_name_length(record, :last_name)
-    validate_age(record: record)
-    validate_address(record: record)
-    validate_years_at_address(record: record)
-    validate_identity_numbers(record: record)
+    valid_name_characters?(record)
+    valid_name_length?(record, :first_names)
+    valid_name_length?(record, :last_name)
+    valid_age?(record: record)
+    valid_address?(record: record)
+    valid_years_at_address?(record: record)
+    valid_identity_numbers?(record: record)
 
-    return false if validate_name_characters(record) ||
-      validate_name_length(record, :first_names) ||
-      validate_name_length(record, :last_name) ||
-      validate_age(record: record) ||
-      !validate_years_at_address(record: record) ||
-      !validate_identity_numbers(record: record) ||
-      !validate_address(record: record)
+    return false if !valid_name_characters?(record) ||
+      !valid_age?(record: record) ||
+      !valid_name_length?(record, :first_names) ||
+      !valid_name_length?(record, :last_name) ||
+      !valid_years_at_address?(record: record) ||
+      !valid_identity_numbers?(record: record) ||
+      !valid_address?(record: record)
 
     true
   end
 
   # TODO: named argument
-  def validate_name_length(record, attribute)
+  def valid_name_length?(record, attribute)
     name = record.send(attribute)
 
     if record.character_limit_exceeded?(name: name)
       record.errors[:character_limit] = "Character limit exceeded: #{name.length}"
-      true
+      false
     end
 
-    false
+    true
   end
 
   # TODO: named argument
-  def validate_name_characters(record)
+  def valid_name_characters?(record)
     name = record.full_name
 
-    return if record.characters_valid?(name: name)
+    if record.characters_valid?(name: name) == false
+      record.errors[:invalid_character] = 'Name contains invalid characters'
+      return false
+    end
 
-    record.errors[:invalid_character] = 'Name contains invalid characters'
     true
-
   end
 
-  def validate_age(record:)
-    return unless record.check_age(date_of_birth: record.date_of_birth) < 18
+  def valid_age?(record:)
+    if record.check_age(date_of_birth: record.date_of_birth) < 18
+      record.errors[:minimum_age] = "Minimum age not met: #{record.check_age(date_of_birth: record.date_of_birth)}"
+      return false
+    end
 
-    record.errors[:minimum_age] = "Minimum age not met: #{record.check_age(date_of_birth: record.date_of_birth)}"
     true
-
   end
 
-  def validate_years_at_address(record:)
+  def valid_years_at_address?(record:)
     if record.years_at_address_valid?(years_at_address: record.years_at_address) == false
       record.errors[:years_at_address] = "Years at address not met: #{record.years_at_address}"
       return false
@@ -110,7 +112,7 @@ class RecordProcessor
     true
   end
 
-  def validate_identity_numbers(record:)
+  def valid_identity_numbers?(record:)
     if record.identity_numbers_valid?(passport_number: record.passport_number, national_insurance_number: record.national_insurance_number) == false
       record.errors[:identity_numbers] = 'Missing both identity numbers'
       return false
@@ -119,7 +121,7 @@ class RecordProcessor
     true
   end
 
-  def validate_address(record:)
+  def valid_address?(record:)
     # Can I use pattern matching here?
     if record.address_valid?(address: record.address) == false
       record.errors[:invalid_address] = 'Invalid address'
