@@ -1,1 +1,8 @@
-# seo_code_challenge
+# Identity Service
+
+## Running the application
+
+```ruby
+ruby lib/app.rb
+```
+
