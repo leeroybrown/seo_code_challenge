@@ -1,5 +1,7 @@
 require 'csv'
 
+require_relative '../modules/constants'
+
 class FileProcessor
 
   attr_reader :file_name, :records
@@ -23,9 +25,9 @@ class FileProcessor
 
   def save_csv()
     begin
-      Dir.mkdir('output_data/') unless Dir.exist?('output_data/')
-      CSV.open("output_data/#{@file_name}.csv",
-               'w', write_headers: true, headers: %w[firstNames lastName dateOfBirth Address yearsAtAddress passportNumber nationalInsuranceNumber errors]) do |line|
+      Dir.mkdir(Constants::FileHelper::OUTPUT_DIR) unless Dir.exist?(Constants::FileHelper::OUTPUT_DIR)
+      CSV.open("#{Constants::FileHelper::OUTPUT_DIR}/#{@file_name}.csv",
+               'w', write_headers: true, headers: Constants::FileHelper::OUTPUT_HEADERS) do |line|
         @records.each { |record| line << record }
       end
     rescue Errno::ENOENT => error

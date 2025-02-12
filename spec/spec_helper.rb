@@ -17,6 +17,7 @@ require 'nokogiri'
 require 'nori'
 
 require_relative '../lib/modules/validation'
+require_relative '../lib/modules/constants'
 require_relative '../lib/models/record'
 require_relative '../lib/models/record_processor'
 require_relative '../lib/models/file_processor'

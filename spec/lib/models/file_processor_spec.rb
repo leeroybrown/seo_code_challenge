@@ -39,6 +39,7 @@ RSpec.describe FileProcessor do
       it 'returns an array of records with errors' do
         expect(processor.filter_by_error(error_type: :test_error)).to eq([])
         expect(processor.filter_by_error(error_type: :test_error)).to be_a(Array)
+        expect(processor.filter_by_error(error_type: :test_error)).to be_empty
       end
     end
     context 'when the method is called with invalid parameters' do
