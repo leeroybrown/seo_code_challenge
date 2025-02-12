@@ -42,27 +42,26 @@ class RecordProcessor
   end
 
   def validate_record(record:)
-    if valid_record?(record)
+    if valid_record?(record: record)
       @valid_records << record.output_values
     else
       @invalid_records << record.output_values
     end
   end
 
-  # TODO: named argument
-  def valid_record?(record)
-    valid_name_characters?(record)
-    valid_name_length?(record, :first_names)
-    valid_name_length?(record, :last_name)
+  def valid_record?(record:)
+    valid_name_characters?(record: record)
+    valid_name_length?(record: record, attribute: :first_names)
+    valid_name_length?(record: record, attribute: :last_name)
     valid_age?(record: record)
     valid_address?(record: record)
     valid_years_at_address?(record: record)
     valid_identity_numbers?(record: record)
 
-    return false if !valid_name_characters?(record) ||
+    return false if !valid_name_characters?(record: record) ||
       !valid_age?(record: record) ||
-      !valid_name_length?(record, :first_names) ||
-      !valid_name_length?(record, :last_name) ||
+      !valid_name_length?(record: record, attribute: :first_names) ||
+      !valid_name_length?(record: record, attribute: :last_name) ||
       !valid_years_at_address?(record: record) ||
       !valid_identity_numbers?(record: record) ||
       !valid_address?(record: record)
@@ -70,8 +69,7 @@ class RecordProcessor
     true
   end
 
-  # TODO: named argument
-  def valid_name_length?(record, attribute)
+  def valid_name_length?(record:, attribute:)
     name = record.send(attribute)
 
     if record.character_limit_exceeded?(name: name)
@@ -82,8 +80,7 @@ class RecordProcessor
     true
   end
 
-  # TODO: named argument
-  def valid_name_characters?(record)
+  def valid_name_characters?(record:)
     name = record.full_name
 
     if record.characters_valid?(name: name) == false
