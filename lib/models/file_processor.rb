@@ -4,12 +4,22 @@ class FileProcessor
 
   attr_reader :file_name, :records
 
+  # Creates a IncorrectFormatError error class
+  # Parent [StandardError]
+
   class IncorrectFormatError < StandardError; end
+
+  # Creates a FileProcessor object to process files
+  # @param file_name [String], records [Set]
+  # @return [Array] of instance variables
 
   def initialize(file_name:, records:)
     @file_name = file_name
     @records = records
   end
+
+  # Saves a file to the output_data directory
+  # @return [Array]
 
   def save_csv()
     begin
@@ -23,12 +33,18 @@ class FileProcessor
     end
   end
 
+  # Creates an array of records with a specific error
+  # @return [Array]
+
   def filter_by_error(error_type:)
     raise IncorrectFormatError, "Error type must be a symbol not a: #{error_type.class}" unless error_type.is_a? Symbol
     @records.select do |invalid_record|
       invalid_record.last.key?(error_type)
     end
   end
+
+  # Creates an array of records with more than two first names
+  # @return [Array]
 
   def filter_by_name_count(records:)
     names = records.select do |record|
