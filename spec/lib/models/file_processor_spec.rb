@@ -1,9 +1,9 @@
 RSpec.describe FileProcessor do
-  let(:processor) { FileProcessor.new(file_name: 'test.csv', records: []) }
+  let(:processor) { FileProcessor.new(file_name: 'test', records: []) }
   describe '#initialize' do
     context 'when the object is created' do
       it 'sets file_name' do
-        expect(processor.file_name).to eq('test.csv')
+        expect(processor.file_name).to eq('test')
         expect(processor.file_name).to be_a(String)
       end
 
