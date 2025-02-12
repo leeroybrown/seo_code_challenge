@@ -29,8 +29,6 @@ class Record
 
   def output_values
     @passport_number.upcase! unless @passport_number.nil?
-    @address = "#{@address[:line1]}, #{@address[:postcode]}" unless @address.nil?
-    @errors = nil if @errors.empty?
 
     [@first_names.capitalize_first_names,
      @last_name.capitalize_surname,
