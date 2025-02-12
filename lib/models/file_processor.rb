@@ -4,14 +4,14 @@ class FileProcessor
 
   attr_reader :file_name, :records
 
-  # Creates a IncorrectFormatError error class
+  # Creates a IncorrectFormatError error object
   # Parent [StandardError]
 
   class IncorrectFormatError < StandardError; end
 
   # Creates a FileProcessor object to process files
   # @param file_name [String], records [Set]
-  # @return [Array] of instance variables
+  # @return [FileProcessor]
 
   def initialize(file_name:, records:)
     @file_name = file_name
