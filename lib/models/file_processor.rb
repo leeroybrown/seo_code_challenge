@@ -19,7 +19,7 @@ class FileProcessor
   end
 
   # Saves a file to the output_data directory
-  # @return [Array]
+  # @return [FileProcessor]
 
   def save_csv()
     begin
