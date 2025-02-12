@@ -9,7 +9,7 @@ RSpec.describe Record do
       last_name: 'Doe',
       date_of_birth: '1990-01-01',
       years_at_address: 5,
-      address: '123 Test St',
+      address: { line1: '123 Test St', postcode: 'AB12 3CD' },
       passport_number: '123456789',
       national_insurance_number: 'AB123456C'
     }
@@ -40,7 +40,7 @@ RSpec.describe Record do
       end
 
       it 'sets the address' do
-        expect(record.address).to eq('123 Test St')
+        expect(record.address).to eq({ line1: '123 Test St', postcode: 'AB12 3CD' })
       end
 
       it 'sets the passport number' do
