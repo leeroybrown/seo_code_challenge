@@ -14,8 +14,6 @@ bundle install
 ruby lib/app.rb
 ```
 
-## Step 3 - View summary
-
 ## Run Rspec tests
 
 ```ruby
