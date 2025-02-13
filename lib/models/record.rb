@@ -3,9 +3,7 @@
 require_relative 'string'
 require_relative '../modules/validation'
 
-
 class Record
-
   # mix-in Validation methods
   include Validation
 
@@ -37,7 +35,7 @@ class Record
   # Creates an array of values to write to file
   # @return [Array]
   def output_values
-    @passport_number.upcase! unless @passport_number.nil?
+    @passport_number&.upcase!
 
     [@first_names.capitalize_first_names,
      @last_name.capitalize_surname,

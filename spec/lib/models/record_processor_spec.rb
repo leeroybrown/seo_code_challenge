@@ -57,19 +57,19 @@ RSpec.describe RecordProcessor do
   end
 
   describe '#valid_record?' do
-    let(:person) {
-    {
-      first_names: 'Marty',
-      last_name: 'McFly',
-      full_name: 'Marty McFly',
-      date_of_birth: Date.new(1968, 06, 03),
-      address: { line1: '123 test street testtown', postcode: 'DS12 3AS' },
-      years_at_address: 7,
-      passport_number: 'AB675863',
-      national_insurance_number: nil
-    }
-  }
-  let(:record) { Record.new(**person) }
+    let(:person) do
+      {
+        first_names: 'Marty',
+        last_name: 'McFly',
+        full_name: 'Marty McFly',
+        date_of_birth: Date.new(1968, 0o6, 0o3),
+        address: { line1: '123 test street testtown', postcode: 'DS12 3AS' },
+        years_at_address: 7,
+        passport_number: 'AB675863',
+        national_insurance_number: nil
+      }
+    end
+    let(:record) { Record.new(**person) }
     context 'when the valid_record? method is called' do
       it 'returns true for valid records' do
         expect(processor.send(:valid_name_length?, record: record, attribute: :first_names)).to be true
