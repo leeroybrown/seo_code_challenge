@@ -5,6 +5,8 @@ require 'csv'
 require_relative '../modules/constants'
 
 class FileProcessor
+
+  # Assumption: file_name and records do not change
   attr_reader :file_name, :records
 
   # Creates a IncorrectFormatError error object
