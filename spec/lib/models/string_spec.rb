@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe String do
   context '#capitalize_first_names' do
     it 'capitalizes the first letter of each name in a string' do

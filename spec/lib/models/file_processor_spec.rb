@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe FileProcessor do
   let(:processor) { FileProcessor.new(file_name: 'test', records: []) }
   describe '#initialize' do
@@ -50,20 +52,20 @@ RSpec.describe FileProcessor do
   end
 
   describe '#filter_by_name_count' do
-    let(:records) {
+    let(:records) do
       [['More than two first names',
-       'Last name',
-       'Address',
-       'Years lived at address',
-       'Passport number',
-       'National insurance number'],
+        'Last name',
+        'Address',
+        'Years lived at address',
+        'Passport number',
+        'National insurance number'],
        ['Two Names',
         'Last name',
         'Address',
         'Years lived at address',
         'Passport number',
         'National insurance number']]
-    }
+    end
     context 'when the method is called' do
       it 'returns an array of records with first names containing more than two words' do
         expect(processor.filter_by_name_count(records: records)).to eq(1)

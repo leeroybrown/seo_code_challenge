@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Validation
-
   # Determines if length of a string exceeds character limit
   # @param name [String]
   # @return [Boolean]
@@ -65,5 +64,4 @@ module Validation
 
     true
   end
-
 end

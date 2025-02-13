@@ -3,7 +3,6 @@
 require_relative 'record'
 
 class RecordProcessor
-
   # Creates a NoRecordsError error object
   # Parent [StandardError]
   class NoRecordsError < StandardError; end
@@ -83,12 +82,12 @@ class RecordProcessor
     valid_identity_numbers?(record: record)
 
     return false if !valid_name_characters?(record: record) ||
-      !valid_age?(record: record) ||
-      !valid_name_length?(record: record, attribute: :first_names) ||
-      !valid_name_length?(record: record, attribute: :last_name) ||
-      !valid_years_at_address?(record: record) ||
-      !valid_identity_numbers?(record: record) ||
-      !valid_address?(record: record)
+                    !valid_age?(record: record) ||
+                    !valid_name_length?(record: record, attribute: :first_names) ||
+                    !valid_name_length?(record: record, attribute: :last_name) ||
+                    !valid_years_at_address?(record: record) ||
+                    !valid_identity_numbers?(record: record) ||
+                    !valid_address?(record: record)
 
     true
   end
@@ -154,7 +153,8 @@ class RecordProcessor
   # @return [Boolean]
 
   def valid_identity_numbers?(record:)
-    if record.identity_numbers_valid?(passport_number: record.passport_number, national_insurance_number: record.national_insurance_number) == false
+    if record.identity_numbers_valid?(passport_number: record.passport_number,
+                                      national_insurance_number: record.national_insurance_number) == false
       record.errors[:identity_numbers] = 'Missing both identity numbers'
       return false
     end

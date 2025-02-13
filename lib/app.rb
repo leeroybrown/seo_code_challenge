@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 require 'nori'
 require 'simple_symbolize'
@@ -31,4 +33,3 @@ puts
 puts "Number of people with no passport number and no NI number: #{identity_number_errors.count}"
 puts "Number of people who have lived at their address for less than 5 years: #{years_at_address_errors.count}"
 puts "Number of people with more than two words in their first name: #{valid_records_count + invalid_records_count}"
-

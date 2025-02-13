@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Validation do
   # Create a test class that includes the module
   let(:dummy_class) { Class.new { extend Validation } }
@@ -110,7 +112,7 @@ RSpec.describe Validation do
       end
 
       it 'returns false when address is empty' do
-        expect(dummy_class.address_valid?(address: { } )).to be false
+        expect(dummy_class.address_valid?(address: {})).to be false
       end
 
       it 'returns false when postcode is not supplied' do
@@ -154,11 +156,13 @@ RSpec.describe Validation do
   describe '#check_identity_numbers' do
     context 'when checking identity numbers' do
       it 'returns true when passport number is nil and national insurance number is present' do
-        expect(dummy_class.identity_numbers_valid?(passport_number: nil, national_insurance_number: 'HY 65 Y7 88 GG')).to be true
+        expect(dummy_class.identity_numbers_valid?(passport_number: nil,
+                                                   national_insurance_number: 'HY 65 Y7 88 GG')).to be true
       end
 
       it 'returns true when passport number is present and national insurance number is nil' do
-        expect(dummy_class.identity_numbers_valid?(passport_number: 'DS567899Y', national_insurance_number: nil)).to be true
+        expect(dummy_class.identity_numbers_valid?(passport_number: 'DS567899Y',
+                                                   national_insurance_number: nil)).to be true
       end
 
       it 'returns false when passport number and national insurance numbers are nil' do
@@ -167,4 +171,3 @@ RSpec.describe Validation do
     end
   end
 end
-

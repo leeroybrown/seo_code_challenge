@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'capitalize_names'
 
 class String
-
   # Monkey patching the Sting class to add methods
   # @return [String]
 
@@ -17,10 +18,10 @@ class String
   # @return [String]
 
   def capitalize_surname
-    if self.chars.include?("'")
-      self.split("'").map(&:capitalize).join("'")
+    if chars.include?("'")
+      split("'").map(&:capitalize).join("'")
     else
-      self.capitalize
+      capitalize
     end
   end
 end
