@@ -7,6 +7,7 @@ class RecordProcessor
   # Parent [StandardError]
   class NoRecordsError < StandardError; end
 
+  # Assumption: file_path, valid_records and invalid_records do not change
   attr_reader :file_path, :valid_records, :invalid_records
 
   # Creates a RecordProcessor object to process records
